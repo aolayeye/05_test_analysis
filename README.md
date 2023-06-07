@@ -58,10 +58,9 @@ The decision variables are the number of pairs of each type of ski to produce ea
 Because we don’t know how many pairs of skis to produce, we write each term of the objective function by multiplying the unit profit by the decision variables we have defined: Maximize Total Profit = $50 Jordanelle + $65 Deercrest
 Note how the dimensions verify that the expression is correct: ($/pair of skis)(number of pairs of skis) = $
 
-Constraints are generally expressed mathematically as algebraic inequalities or equations with all variables on the left side and constant terms on the right (this facilitates solving the model on a spreadsheet, as we will discuss later). To model the constraints, we use a similar approach. First, consider the fabrication and finishing constraints. We expressed these constraints as
+Constraints are generally expressed mathematically as algebraic inequalities or equations with all variables on the left side and constant terms on the right (this facilitates solving the model on a spreadsheet, as we will discuss later). To model the constraints, we use a similar approach. First, consider the fabrication and finishing constraints. We expressed these constraints as:
 
     Fabrication: Total labor-hours used in fabrication cannot exceed the amount of labor hours available.
-
     Finishing: Total labor-hours used in finishing cannot exceed the amount of labor hours available.
 
 First, note that the phrase “cannot exceed” translates mathematically as "<="
@@ -72,13 +71,71 @@ Second, note that “cannot exceed” divides each constraint into two parts—t
 
 ### Sklenka Ski Company: Modeling the Constraints
 
-The amount of labor available in fabrication is
-whereas in finishing we have Because each pair of Jordanelle skis requires 3.5 labor-hours and each pair of Deercrest skis requires 4 labor-hours in the fabricating department, the total labor used in fabrication is Note that the dimensions of these terms are Similarly, for the finishing department, the total labor used is
+The amount of labor available in fabrication is: (12 workers) * (7 hours/day) = 84 hours/day
+whereas in finishing we have (3 workers) * (7 hours/day) = 84 hours/day Because each pair of Jordanelle skis requires 3.5 labor-hours and each pair of Deercrest skis requires 4 labor-hours in the fabricating department, the total labor used in fabrication is 3.5 Jordanelle + 4 Deercrest  
+Note that the dimensions of these terms are (hours/pair of skis)(number of pairs of skis produced per day) = hours.
+Similarly, for the finishing department, the total labor used is 1 Jordanelle + 1.5 Deercrest
 
 Therefore, the appropriate constraints are:
+      Fabrication: 3.5 Jordanelle + 4 Deercrest <= 84
+      Finishing: 1 Jordanelle + 1.5 Deercrest <= 21
 
 For the market mixture constraint “Number of pairs of Deercrest skis must be at least twice the number of pairs of Jordanelle skis,” we have
+Deercrest >= 2 Jordanelle
 
-It is customary to write all the variables on the left-hand side of the constraint. Thus, an alternative expression for this constraint is
+It is customary to write all the variables on the left-hand side of the constraint. Thus, an alternative expression for this constraint is:
+Deercrest - 2 Jordanelle >= 0
 
-The difference between the number of Deercrest skis and twice the number of Jordanelle skis can be thought of as the excess number of Deercrest skis produced over the minimum market mixture requirement. Finally, nonnegativity constraints are written as
+The difference between the number of Deercrest skis and twice the number of Jordanelle skis can be thought of as the excess number of Deercrest skis produced over the minimum market mixture requirement. Finally, nonnegativity constraints are written as:
+
+Deercrest >= 0
+Jordanelle >= 0
+
+The complete mathematical model for the SSC problem is:
+    Maximize Total Profit =  50 Jordanelle + 65 Deercrest
+                             3.5 Jordanelle + 4 Deercrest <= 84
+                             1 Jordanelle + 1.5 Deercrest <= 21
+                             Deercrest - 2 Jordanelle >= 0
+                             Deercrest >= 0
+                             Jordanelle >= 0
+                             
+#### Implementing Linear Optimization Models on Spreadsheets
+
+We will learn how to solve optimization models using an Excel tool called Solver. To facilitate the use of Solver, we suggest the following spreadsheet engineering guidelines for designing spreadsheet models for optimization problems:
+
+    Put the objective function coefficients, constraint coefficients, and right-hand values in a logical format in the spreadsheet. For example, you might assign the decision variables to columns and the constraints to rows, much like the mathematical formulation of the model, and input the model parameters in a matrix. If you have many more variables than constraints, it might make sense to use rows for the variables and columns for the constraints.
+
+    Define a set of cells (either rows or columns) for the values of the decision variables. In some models, it may be necessary to define a matrix to represent the decision variables. The names of the decision variables should be listed directly above the decision variable cells. Use shading or other formatting to distinguish these cells.
+
+    Define separate cells for the objective function and each constraint function (the left-hand side of a constraint). Use descriptive labels directly above these cells.
+    
+#### A Spreadsheet Model for Sklenka Skis
+
+Figure 13.1 shows a spreadsheet model for the SSC example. (Excel file Sklenka Skis already has the optimal solution. Typically, you would start with all decision variables equal to zero as shown in Figure 13.1.). We use the principles of spreadsheet The engineering that we discussed in Chapter 2 to implement the model. The Data portion of the spreadsheet provides the objective function coefficients, constraint coefficients, and right-hand sides of the model. Such data should be kept separate from the actual model so that if any data are changed, the model will automatically be updated. In the Model section, the number of each product to make is given in cells B14 and C14. Also in the Model section are calculations for the constraint functions,
+    3.5 Jordanelle + 4 Deercrest (hours used in fabrication, cell D15)
+    1 Jordanelle + 1.5 Deercrest (hours used in finishing, cell D16) and the objective function, 
+    50 Jordanelle + 65 Deercrest (cell D22).
+    
+    ![image](https://github.com/aolayeye/05_test_analysis/assets/67847583/2edcb6e7-e0fb-4dee-8e42-92d306848bb1)
+
+To help you understand the correspondence between the mathematical model and the spreadsheet model more clearly, we will write the model in terms of formulas used in the spreadsheet cells: 
+       Maximize Profit = D22 = B9*B14 + C9*C14
+
+subject to the constraints:
+        D15 = B6*B14 + C6*C14 <= D6 (fabrication)
+        D16 = B7*B14 + C7*C14 <= D7 (finishing)
+        D19 = C14 - 2*B14 >= 0 (market mixture)
+              B14 >= 0, C14 >= 0 (nonnegativity)
+
+Observe how the constraint functions and right-hand-side values are stored in separate cells within the spreadsheet.
+In Excel, the pairwise sum of products of terms can easily be computed using the SUMPRODUCT function. For example, the objective function:
+    = B9*B14 + C9*C14 is equivalent to SUMPRODUCT(B9:C9, B14:C14)
+
+Similarly, for the labor limitation constraints:
+    = B6*B14 + C6*C14 is equivalent to SUMPRODUCT(B6:C6, B14:C14)
+    = B7*B14 + C7*C14 is equivalent to SUMPRODUCT(B7:C7, B14:C14)
+    
+
+The SUMPRODUCT function often simplifies the model-building process, particularly when many variables are involved.
+
+We should note that optimization models that we develop can be used in all phases of analytics—descriptive, predictive, and prescriptive. For example, we can use the model to evaluate the profit and utilization of resources in a descriptive setting to answer the question “What are we doing now?” We might use the model in a predictive setting to evaluate forecasted cost increases or the effects of inflation in the future. Finally, we can ask “What is the best we can do with our current resources?” In this way, the model can be used as a prescriptive model.
