@@ -116,7 +116,7 @@ Figure 13.1 shows a spreadsheet model for the SSC example. (Excel file Sklenka S
     1 Jordanelle + 1.5 Deercrest (hours used in finishing, cell D16) and the objective function, 
     50 Jordanelle + 65 Deercrest (cell D22).
     
-    ![image](https://github.com/aolayeye/05_test_analysis/assets/67847583/2edcb6e7-e0fb-4dee-8e42-92d306848bb1)
+   ![image](https://github.com/aolayeye/05_test_analysis/assets/67847583/2edcb6e7-e0fb-4dee-8e42-92d306848bb1)
 
 To help you understand the correspondence between the mathematical model and the spreadsheet model more clearly, we will write the model in terms of formulas used in the spreadsheet cells: 
        Maximize Profit = D22 = B9*B14 + C9*C14
